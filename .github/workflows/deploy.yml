@@ -21,7 +21,11 @@ jobs:
         run: flutter pub get
 
       - name: Build web (release)
-        run: flutter build web --release --base-href="/vantabuddy-flutter/" --no-wasm-dry-run
+        run: flutter build web --release
+
+      - name: Fix base href in index.html
+        run: |
+          sed -i 's|<base href="/"|<base href="/vantabuddy-flutter/"|g' build/web/index.html
 
       - name: Deploy to GitHub Pages (gh-pages)
         uses: peaceiris/actions-gh-pages@v3
