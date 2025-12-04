@@ -1,11 +1,11 @@
-name: Build and Deploy Flutter Web
+name: Build Flutter Web
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,17 +24,8 @@ jobs:
       - name: Update base href in index.html
         run: sed -i 's|<base href="/"|<base href="/vantabuddy-flutter/"|' build/web/index.html
 
-      - name: Configure git
-        run: |
-          git config --global user.email "action@github.com"
-          git config --global user.name "GitHub Action"
-
-      - name: Deploy to gh-pages
-        run: |
-          git fetch origin gh-pages --depth=1 || true
-          git checkout --orphan gh-pages-temp
-          git rm -rf .
-          cp -r build/web/* .
-          git add .
-          git commit -m "Deploy from main" || true
-          git push origin gh-pages-temp:gh-pages -f
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-web-build
+          path: build/web/
