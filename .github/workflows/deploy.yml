@@ -25,7 +25,14 @@ jobs:
 
       - name: Fix base href in index.html
         run: |
-          sed -i 's|<base href="/"|<base href="/vantabuddy-flutter/"|g' build/web/index.html
+          python3 << 'EOF'
+          import re
+          with open('build/web/index.html', 'r') as f:
+              content = f.read()
+          content = re.sub(r'<base href="/">', '<base href="/vantabuddy-flutter/">', content)
+          with open('build/web/index.html', 'w') as f:
+              f.write(content)
+          EOF
 
       - name: Deploy to GitHub Pages (gh-pages)
         uses: peaceiris/actions-gh-pages@v3
