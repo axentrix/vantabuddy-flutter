@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -26,10 +24,17 @@ jobs:
       - name: Update base href in index.html
         run: sed -i 's|<base href="/"|<base href="/vantabuddy-flutter/"|' build/web/index.html
 
+      - name: Configure git
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web
-          cname: ""
+        run: |
+          git fetch origin gh-pages --depth=1 || true
+          git checkout --orphan gh-pages-temp
+          git rm -rf .
+          cp -r build/web/* .
+          git add .
+          git commit -m "Deploy from main" || true
+          git push origin gh-pages-temp:gh-pages -f
