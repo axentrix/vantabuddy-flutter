@@ -34,10 +34,11 @@ addEventListener("message", eventListener);
 if (!window._flutter) {
   window._flutter = {};
 }
-_flutter.buildConfig = {"engineRevision":"13e658725ddaa270601426d1485636157e38c34c","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
+_flutter.buildConfig = {"engineRevision":"13e658725ddaa270601426d1485636157e38c34c","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"/vantabuddy-flutter/main.dart.js"},{}]};
 
 _flutter.loader.load({
   serviceWorkerSettings: {
     serviceWorkerVersion: "178550543"
-  }
+  },
+  entrypointBaseUrl: "/vantabuddy-flutter/"
 });
